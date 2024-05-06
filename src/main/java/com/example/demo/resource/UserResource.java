@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.User;
-import com.example.demo.dto.UserRecordDTO;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.service.UserService;
 
 //REST CONTROLLER DEIXA DISPONIVEL OS END POINTS (GET, PUT, DELET, POST...)
@@ -24,10 +24,14 @@ public class UserResource {
 	private UserService service;
 	
 	@GetMapping
-	public ResponseEntity<List<UserRecordDTO>> findAll(){	
-		List<User> list = service.findAll();
-		List<UserRecordDTO> listDTO = list.stream().map(x -> new UserRecordDTO(x.getId(),x.getName(),x.getEmail())).collect(Collectors.toList());
-		return ResponseEntity.ok().body(listDTO);	
+	public ResponseEntity<List<UserDTO>> findAll(){	
+	
+		List<User> userList = service.findAll();
+		List<UserDTO> userListDTO = userList.stream()
+				.map(user -> new UserDTO(user))			
+				.collect(Collectors.toList());
+		
+		return ResponseEntity.ok().body(userListDTO);	
 	}
 
 }
